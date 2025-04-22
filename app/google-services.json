@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1081117539604",
+    "project_id": "casaconnect-fce71",
+    "storage_bucket": "casaconnect-fce71.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081117539604:android:4b0ee1b36d46ddf4d89601",
+        "android_client_info": {
+          "package_name": "com.example.casaconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKMZRFaepIVXDRoA4UhtLGkkVhDHLBMIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
