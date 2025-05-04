@@ -7,10 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.casaconnect.databinding.ActivityLogSignBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class log_signActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLogSignBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private val firestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +30,23 @@ class log_signActivity : AppCompatActivity() {
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
+                            val uid = firebaseAuth.currentUser?.uid ?: return@addOnCompleteListener
+                            // Fetch role from Firestore
+                            firestore.collection("users").document(uid).get()
+                                .addOnSuccessListener { doc ->
+                                    val role = doc.getString("role") ?: "user"
+
+                                    if (role == "admin") {
+                                        startActivity(Intent(this, Admin_activity::class.java))
+                                    } else {
+                                        startActivity(Intent(this, MainActivity::class.java))
+                                    }
+                                    finish()
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(this, "Failed to fetch role: ${e.message}", Toast.LENGTH_SHORT).show()
+                                }
+
                         } else {
                             Toast.makeText(this, it.exception?.message ?: "Login failed", Toast.LENGTH_SHORT).show()
                         }
@@ -46,9 +63,17 @@ class log_signActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (firebaseAuth.currentUser != null) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
+        val currentUser = firebaseAuth.currentUser ?: return
+        // Check role and redirect if already signed in
+        firestore.collection("users").document(currentUser.uid).get()
+            .addOnSuccessListener { doc ->
+                val role = doc.getString("role") ?: "user"
+                if (role == "admin") {
+                    startActivity(Intent(this, Admin_activity::class.java))
+                } else {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+                finish()
+            }
     }
 }

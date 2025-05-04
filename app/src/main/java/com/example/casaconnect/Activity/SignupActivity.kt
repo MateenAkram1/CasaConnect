@@ -13,7 +13,8 @@ data class UserModel(
     val userId: String = "",
     val name: String = "",
     val email: String = "",
-    val c_n: String
+    val c_n: String,
+    val string: String
 )
 
 class SignupActivity : AppCompatActivity() {
@@ -45,7 +46,7 @@ class SignupActivity : AppCompatActivity() {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val userId = firebaseAuth.currentUser?.uid ?: return@addOnCompleteListener
-                                val user = UserModel(userId, name, email,c_n)
+                                val user = UserModel(userId, name, email,c_n,"user")
 
                                 firestore.collection("users").document(userId).set(user)
                                     .addOnSuccessListener {

@@ -1,16 +1,29 @@
 package com.example.casaconnect.Activity
 
+import android.R
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.casaconnect.Domain.PropertyDomain
 import com.example.casaconnect.databinding.ActivityDetailBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
+data class wish(
+    var userid: String?= null,
+    val adid: String? = null
+)
 
 class DetailActivity : AppCompatActivity() {
     var binding: ActivityDetailBinding? = null
     private var `object`: PropertyDomain? = null
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val firestore = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.enableEdgeToEdge()
@@ -18,6 +31,57 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding!!.getRoot())
         this.bundles
         setVariable()
+        binding!!.contacttxt2.visibility = View.INVISIBLE
+        binding!!.analysisbtn.setOnClickListener {
+            binding!!.contacttxt2.visibility = View.VISIBLE
+            FirebaseFirestore.getInstance().collection("ads")
+                .whereEqualTo("type", `object`!!.type)
+                .whereEqualTo("size", `object`!!.size)
+                .get()
+                .addOnSuccessListener { documents ->
+                    var ad: Int = 0
+                    var count:Int = 0
+                    for (doc in documents) {
+                       ad +=  doc.get("price")?.toString()?.toIntOrNull() ?: 0
+                        Log.e("Analysis", "price: ${ad}")
+                        count++
+                    }
+                    if(count == 0)
+                        count++
+                    if((ad/count).toInt() == `object`!!.price.toInt()){
+                        binding!!.contacttxt2.text = "Fair Price"
+                    }
+                    else if((ad/count).toInt() > `object`!!.price.toInt()){
+                        binding!!.contacttxt2.text = "Over Priced"
+                    }
+                    else if((ad/count).toInt() < `object`!!.price.toInt()){
+                        binding!!.contacttxt2.text = "Good Price"
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Analysis", "Query failed: ${e.message}", e)
+                }
+        }
+        binding!!.wishlistBtn.setOnClickListener{
+            val currentUser = firebaseAuth.currentUser ?: run {
+                Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
+
+            }
+            val obj = wish(`object`!!.owndby.toString(),`object`!!.adid.toString())
+            firestore.collection("wishlist").add(obj)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Added to wishlist", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Firestore Failed: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    Log.e("Firestore Error", exception.message, exception)
+                }
+        }
+        binding!!.calcBtn.setOnClickListener  {
+            startActivity(Intent(this, Calculator::class.java))
+        }
+
     }
 
     private fun setVariable() {
@@ -26,14 +90,13 @@ class DetailActivity : AppCompatActivity() {
                 finish()
             }
         })
-        val drawableResourseid = getResources().getIdentifier(
-            `object`!!.pickpath,
-            "drawable",
-            this@DetailActivity.getPackageName()
-        )
+
         Glide.with(this@DetailActivity)
-            .load(drawableResourseid)
+            .load(`object`!!.pickpath)
+            .placeholder(android.R.color.darker_gray)
+            .error(android.R.drawable.stat_notify_error)
             .into(binding!!.image1)
+
         binding!!.titletxt.setText(`object`!!.title)
         binding!!.typetxt.setText(`object`!!.type)
         binding!!.addresstxt.setText(`object`!!.address)

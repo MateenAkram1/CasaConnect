@@ -12,6 +12,7 @@ import com.example.casaconnect.Activity.SignupActivity
 import com.example.casaconnect.R
 import com.example.casaconnect.databinding.ActivityDetailBinding
 import com.example.casaconnect.databinding.ActivitySellerBinding
+import kotlin.jvm.java
 
 class SellerActivity : AppCompatActivity() {
     private var binding: ActivitySellerBinding?=null

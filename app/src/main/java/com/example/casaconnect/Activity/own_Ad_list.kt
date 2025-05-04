@@ -1,19 +1,18 @@
 package com.example.casaconnect.Activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.casaconnect.Adapter.ListitemsAdatper
 import com.example.casaconnect.Domain.PropertyDomain
-import com.example.casaconnect.R
 import com.example.casaconnect.databinding.ActivityOwnAdListBinding
-import com.example.casaconnect.databinding.ActivitySellerBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class own_Ad_list : AppCompatActivity() {
     private var binding: ActivityOwnAdListBinding?= null
+    private val firebaseAuth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -23,74 +22,54 @@ class own_Ad_list : AppCompatActivity() {
     }
 
 private fun initList() {
-    val items = ArrayList<PropertyDomain?>()
-    items.add(
-        PropertyDomain(
-            "Appartment",
-            "Royal Appartment",
-            "Lahore",
-            "pic_1",
-            "Nair o Nair",
-            200,
-            3,
-            2,
-            "5 Kanal",
-            true,
-            5.0
-        )
-    )
-    items.add(
-        PropertyDomain(
-            "House",
-            "Royal House",
-            "Isb",
-            "pic_2",
-            "Nair o Nair",
-            200,
-            3,
-            2,
-            "5 Kanal",
-            true,
-            2.5
-        )
-    )
-    items.add(
-        PropertyDomain(
-            "Vila",
-            "Royal Vila",
-            "Lahore",
-            "pic_3",
-            "Nair o Nair",
-            200,
-            3,
-            2,
-            "5 Kanal",
-            true,
-            2.5
-        )
-    )
-    items.add(
-        PropertyDomain(
-            "Appartment",
-            "Royal House",
-            "Lahore",
-            "pic_4",
-            "Nair o Nair",
-            200,
-            3,
-            2,
-            "5 Kanal",
-            true,
-            2.5
-        )
-    )
-    binding!!.viewlist.setLayoutManager(
-        LinearLayoutManager(
-            this,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-    )
-    binding!!.viewlist.setAdapter(ListitemsAdatper(items))
+    val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+    val items1 = ArrayList<PropertyDomain?>()
+    val currentUser = firebaseAuth.currentUser ?: run {
+        Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
+        return
+    }
+    db.collection("ads")
+        .get()
+        .addOnSuccessListener { result ->
+            for (document in result) {
+                val property = PropertyDomain(
+                    owndby = document.getString("userId"),
+                    postdate = document.getTimestamp("postedAt")?.toDate()?.toString(),
+                    type = document.getString("type"),
+                    title = document.getString("title"),
+                    address = document.getString("address"),
+                    pickpath = document.getString("imageUrls"),
+                    description = document.getString("description"),
+                    price = document.get("price")?.toString()?.toIntOrNull() ?: 0,
+                    bed = document.get("bed")?.toString()?.toIntOrNull() ?: 0,
+                    bath = document.get("bath")?.toString()?.toIntOrNull() ?: 0,
+                    size = document.getString("size"),
+                    garage = document.get("garage") as? Boolean ?: false,
+                    score = document.get("rating")?.toString()?.toDoubleOrNull() ?: 0.0,
+                    adid = document.getString("adid").toString(),
+                    deleteflag = true
+                )
+                if(property.owndby == currentUser.uid) {
+                    items1.add(property)
+                    binding!!.viewlist.setLayoutManager(
+                        LinearLayoutManager(
+                            this,
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
+                    )
+                    binding!!.viewlist.setAdapter(ListitemsAdatper(items1))
+                }
+            }
+
+        }
+        .addOnFailureListener {
+            android.widget.Toast.makeText(
+                this,
+                "Failed to load ads: ${it.message}",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
+        }
+
 }
 }

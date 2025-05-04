@@ -22,17 +22,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/img_button"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
 
+                <EditText
+                    android:id="@+id/pricee_txt"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="64dp"
                     android:layout_marginTop="32dp"
-                    android:background="@color/white"
-                    android:text="Upload Images"
-                    android:textColor="@color/orange"
-                    android:textSize="18sp"
+                    android:layout_marginEnd="64dp"
+                    android:background="@drawable/background_edittxt"
+                    android:ems="10"
+                    android:hint="Price"
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/desctxt" />
 
@@ -86,7 +93,7 @@
                     android:background="@drawable/background_edittxt"
                     android:ems="10"
                     android:hint="Garage"
-                    android:inputType="text|textPassword"
+                    android:inputType="numberDecimal"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
@@ -105,7 +112,7 @@
                     android:background="@drawable/background_edittxt"
                     android:ems="10"
                     android:hint="Size"
-                    android:inputType="text|textPassword"
+                    android:inputType="numberDecimal"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
@@ -123,7 +130,7 @@
                     android:background="@drawable/background_edittxt"
                     android:ems="10"
                     android:hint="Bath"
-                    android:inputType="text|textPassword"
+                    android:inputType="numberDecimal"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
@@ -161,7 +168,7 @@
                     android:background="@drawable/background_edittxt"
                     android:ems="10"
                     android:hint="bed"
-                    android:inputType="text|textPassword"
+                    android:inputType="numberDecimal"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
@@ -212,14 +219,26 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/signin_button"
+                android:id="@+id/img_button"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="30dp"
+                android:background="@color/white"
+                android:text="Upload Images"
+                android:textColor="@color/orange"
+                android:textSize="18sp" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/done_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
                 android:layout_marginLeft="64dp"
                 android:layout_marginRight="64dp"
                 android:background="@color/orange"
-                android:text="Sign Up"
+                android:text="Done"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
