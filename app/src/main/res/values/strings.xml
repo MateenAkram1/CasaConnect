@@ -20,4 +20,8 @@
         <item>Kanal</item>
         <item>Acres</item>
     </string-array>
+    <string-array name="Options">
+        <item>Cost</item>
+        <item>Percent</item>
+    </string-array>
 </resources>

@@ -23,6 +23,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="788dp">
 
+                <Spinner
+                    android:id="@+id/tax2"
+                    android:layout_width="120dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="64dp"
+                    android:background="@drawable/bg_edit_text"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tax" />
+
                 <TextView
                     android:id="@+id/Res_txt"
                     android:layout_width="wrap_content"
@@ -34,19 +48,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/Dev_txt" />
-
-                <TextView
-                    android:id="@+id/textView16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
-                    android:text="For Percentage add % in end"
-                    android:textColor="@color/white"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/price_txt" />
 
                 <EditText
                     android:id="@+id/Dev_txt"
@@ -89,7 +90,7 @@
 
                 <EditText
                     android:id="@+id/comm_txt"
-                    android:layout_width="0dp"
+                    android:layout_width="120dp"
                     android:layout_height="45dp"
                     android:layout_marginStart="64dp"
                     android:layout_marginTop="32dp"
@@ -97,12 +98,11 @@
                     android:background="@drawable/bg_edit_text"
                     android:ems="10"
                     android:hint="Commision"
-                    android:inputType="text|number"
+                    android:inputType="number"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tax_txt" />
@@ -121,10 +121,10 @@
 
                 <EditText
                     android:id="@+id/tax_txt"
-                    android:layout_width="0dp"
+                    android:layout_width="120dp"
                     android:layout_height="45dp"
                     android:layout_marginStart="64dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="64dp"
                     android:background="@drawable/bg_edit_text"
                     android:ems="10"
@@ -134,10 +134,23 @@
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                    app:layout_constraintTop_toBottomOf="@+id/price_txt" />
+
+                <Spinner
+                    android:id="@+id/tax"
+                    android:layout_width="120dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="64dp"
+                    android:background="@drawable/bg_edit_text"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/price_txt" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

@@ -31,5 +31,10 @@ class SellerActivity : AppCompatActivity() {
                 startActivity(Intent(this@SellerActivity, post_ad::class.java))
             }
         })
+        binding!!.buyButton.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                finish()
+            }
+        })
     }
 }

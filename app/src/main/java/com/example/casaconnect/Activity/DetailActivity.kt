@@ -48,13 +48,15 @@ class DetailActivity : AppCompatActivity() {
                     }
                     if(count == 0)
                         count++
-                    if((ad/count).toInt() == `object`!!.price.toInt()){
+
+                    var x: Int =  (`object`!!.price.toInt()*0.1).toInt()
+                    if((ad/count).toInt() >= `object`!!.price.toInt()-x && (ad/count).toInt() <= `object`!!.price.toInt()+x){
                         binding!!.contacttxt2.text = "Fair Price"
                     }
-                    else if((ad/count).toInt() > `object`!!.price.toInt()){
+                    else if((ad/count).toInt() > `object`!!.price.toInt()+x){
                         binding!!.contacttxt2.text = "Over Priced"
                     }
-                    else if((ad/count).toInt() < `object`!!.price.toInt()){
+                    else {
                         binding!!.contacttxt2.text = "Good Price"
                     }
                 }

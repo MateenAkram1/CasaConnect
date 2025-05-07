@@ -49,8 +49,12 @@ class post_ad : AppCompatActivity() {
             if (imageUri == null) {
                 Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
             } else {
+                if (binding.titleTxt.toString() == "" || binding.titleTxt.toString() == ""|| binding.addText.toString() == ""|| binding.bedTxt.toString() == ""|| binding.bathTxt.toString() == "" || binding.sizeTxt.toString() == ""|| binding.desctxt.toString() == "" || binding.priceeTxt.toString() == "")
+                    Toast.makeText(this, "Please Enter All details", Toast.LENGTH_SHORT).show()
+                else{
                 uploadImageToImgBB()
-            }
+                finish()
+            }}
         }
     }
 

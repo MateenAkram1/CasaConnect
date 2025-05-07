@@ -1,6 +1,8 @@
 package com.example.casaconnect.Activity
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,9 +18,28 @@ class Calculator : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityCalculatorBinding.inflate(getLayoutInflater())
         setContentView(binding.getRoot())
-        binding.CalBtn.setOnClickListener {
+        val typeSpinner = findViewById<Spinner>(R.id.tax)
+        val typeSpinner1 = findViewById<Spinner>(R.id.tax2)
 
-            val result = binding.priceTxt.text.toString().toInt() + binding.commTxt.text.toString().toInt() + binding.taxTxt.text.toString().toInt() + binding.DevTxt.text.toString().toInt()
+        val types = resources.getStringArray(R.array.Options)
+        val spinnerAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            types
+        )
+        typeSpinner.adapter = spinnerAdapter
+        typeSpinner1.adapter = spinnerAdapter
+
+        binding.CalBtn.setOnClickListener {
+            var x:Int =  binding.taxTxt.text.toString().toInt()
+            var y:Int = binding.commTxt.text.toString().toInt()
+            var result:Int = 0
+            if(binding.tax.selectedItem.toString() == "Percent")
+                x = (binding.priceTxt.text.toString().toInt()*x)/100
+            if(binding.tax2.selectedItem.toString() == "Percent")
+                y = (binding.priceTxt.text.toString().toInt()*y)/100
+
+            result = binding.priceTxt.text.toString().toInt() + x + y + binding.DevTxt.text.toString().toInt()
             binding.ResTxt.text = "Result\n" + result.toString()
         }
     }
