@@ -22,9 +22,6 @@ import com.ismaeldivita.chipnavigation.ChipNavigationBar
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
-
-
-    // filter state
     private var isFilterApplied = false
     private var minPrice    = 0
     private var maxPrice    = Int.MAX_VALUE
@@ -60,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SellerActivity::class.java))
         }
 
-        // Search button taps
+        // Search button
         binding.searchbtn.setOnClickListener {
             val query = binding.searchbar.text.toString().trim().takeIf { it.isNotBlank() }
             loadAds(minPrice, maxPrice, minBeds, minBaths, location, query)
@@ -103,7 +100,6 @@ class MainActivity : AppCompatActivity() {
         location: String? = null,
         searchStr: String? = null
     ) {
-        // update filter-applied flag
         isFilterApplied = (
                 minPrice > 0 ||
                         maxPrice < Int.MAX_VALUE ||
@@ -181,7 +177,7 @@ class MainActivity : AppCompatActivity() {
         val maxEt  = v.findViewById<EditText>(R.id.maxPriceEt)
         val bedEt  = v.findViewById<EditText>(R.id.bedEt)
         val bathEt = v.findViewById<EditText>(R.id.bathEt)
-        val locEt  = v.findViewById<EditText>(R.id.locationSpinner)       // must match your XML
+        val locEt  = v.findViewById<EditText>(R.id.locationSpinner)
         val apply  = v.findViewById<Button>(R.id.applyFilterBtn)
 
         apply.setOnClickListener {
@@ -192,7 +188,6 @@ class MainActivity : AppCompatActivity() {
             location = locEt.text.toString().takeIf { it.isNotBlank() }
 
             dialog.dismiss()
-            // reload ads with both filters *and* any existing search text
             val currentSearch = binding.searchbar.text.toString().trim().takeIf { it.isNotBlank() }
             loadAds(minPrice, maxPrice, minBeds, minBaths, location, currentSearch)
         }

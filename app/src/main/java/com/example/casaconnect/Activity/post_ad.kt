@@ -29,12 +29,8 @@ import kotlin.io.encoding.Base64
 
 class post_ad : AppCompatActivity() {
     private lateinit var binding: ActivityPostAdBinding
-
-    // Hold all selected image Uris
     private val selectedImageUris = mutableListOf<Uri>()
-    // Hold all uploaded image URLs
     private val imageUrls = mutableListOf<String>()
-
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firestore   = FirebaseFirestore.getInstance()
 
@@ -78,19 +74,16 @@ class post_ad : AppCompatActivity() {
         if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
             selectedImageUris.clear()
             data?.let { intent ->
-                // Multiple selection
                 intent.clipData?.let { clip ->
                     for (i in 0 until clip.itemCount) {
                         selectedImageUris.add(clip.getItemAt(i).uri)
                     }
                 }
-                // Single selection
                 intent.data?.let { uri ->
                     selectedImageUris.add(uri)
                 }
             }
             Toast.makeText(this, "${selectedImageUris.size} images selected", Toast.LENGTH_SHORT).show()
-            // Optionally preview thumbnails...
         }
     }
 
@@ -147,8 +140,6 @@ class post_ad : AppCompatActivity() {
         imageUrls.clear()
         val apiKey = "c00ccfa768659c2bfe6b8d107f4dc5d3"
         val client = OkHttpClient()
-
-        // Upload each image in turn
         selectedImageUris.forEachIndexed { index, uri ->
             val inputStream = contentResolver.openInputStream(uri)
             val bytes = inputStream?.readBytes() ?: return@forEachIndexed
@@ -178,7 +169,6 @@ class post_ad : AppCompatActivity() {
                             .getJSONObject("data")
                             .getString("url")
                         imageUrls.add(link)
-                        // If this was the last image, save the ad
                         if (imageUrls.size == selectedImageUris.size) {
                             runOnUiThread { saveAdToFirestore() }
                         }

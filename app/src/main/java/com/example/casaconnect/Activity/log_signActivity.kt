@@ -31,7 +31,6 @@ class log_signActivity : AppCompatActivity() {
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
                             val uid = firebaseAuth.currentUser?.uid ?: return@addOnCompleteListener
-                            // Fetch role from Firestore
                             firestore.collection("users").document(uid).get()
                                 .addOnSuccessListener { doc ->
                                     val role = doc.getString("role") ?: "user"
@@ -64,7 +63,6 @@ class log_signActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val currentUser = firebaseAuth.currentUser ?: return
-        // Check role and redirect if already signed in
         firestore.collection("users").document(currentUser.uid).get()
             .addOnSuccessListener { doc ->
                 val role = doc.getString("role") ?: "user"
