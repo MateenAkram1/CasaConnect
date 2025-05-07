@@ -11,7 +11,7 @@ data class AdModel(
     val garage: String = "",
     val type: String = "",
     val description: String = "",
-    val imageUrls: String = "",
+    val imageUrls: List<String?>,
     val userId: String = "",
     val price: String="",
     val rating: String="0",

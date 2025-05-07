@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                             type = doc.getString("type"),
                             title = doc.getString("title"),
                             address = doc.getString("address"),
-                            pickpath = doc.getString("imageUrls"),
+                            pickpath = doc.get("imageUrls") as List<String?>,
                             description = doc.getString("description"),
                             price = doc.get("price")?.toString()?.toIntOrNull() ?: 0,
                             bed = doc.get("bed")?.toString()?.toIntOrNull() ?: 0,

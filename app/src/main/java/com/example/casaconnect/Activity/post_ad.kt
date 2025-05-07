@@ -25,39 +25,84 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONObject
 import java.io.IOException
+import kotlin.io.encoding.Base64
 
 class post_ad : AppCompatActivity() {
     private lateinit var binding: ActivityPostAdBinding
-    private var imageUri: Uri? = null
-    private var imageUrl: String? = null
+
+    // Hold all selected image Uris
+    private val selectedImageUris = mutableListOf<Uri>()
+    // Hold all uploaded image URLs
+    private val imageUrls = mutableListOf<String>()
+
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
+    private val firestore   = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityPostAdBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setarr()
         setarr1()
         setarr2()
+
         binding.imgButton.setOnClickListener {
-            pickImage()
+            pickImages()
         }
 
         binding.doneButton.setOnClickListener {
-            if (imageUri == null) {
-                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+            if (selectedImageUris.isEmpty()) {
+                Toast.makeText(this, "Please select at least one image", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (areFieldsValid()) {
+                uploadAllImagesToImgBB()
             } else {
-                if (binding.titleTxt.toString() == "" || binding.titleTxt.toString() == ""|| binding.addText.toString() == ""|| binding.bedTxt.toString() == ""|| binding.bathTxt.toString() == "" || binding.sizeTxt.toString() == ""|| binding.desctxt.toString() == "" || binding.priceeTxt.toString() == "")
-                    Toast.makeText(this, "Please Enter All details", Toast.LENGTH_SHORT).show()
-                else{
-                uploadImageToImgBB()
-                finish()
-            }}
+                Toast.makeText(this, "Please enter all details", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
+    private fun pickImages() {
+        Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            startActivityForResult(Intent.createChooser(this, "Select Pictures"), 1001)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
+            selectedImageUris.clear()
+            data?.let { intent ->
+                // Multiple selection
+                intent.clipData?.let { clip ->
+                    for (i in 0 until clip.itemCount) {
+                        selectedImageUris.add(clip.getItemAt(i).uri)
+                    }
+                }
+                // Single selection
+                intent.data?.let { uri ->
+                    selectedImageUris.add(uri)
+                }
+            }
+            Toast.makeText(this, "${selectedImageUris.size} images selected", Toast.LENGTH_SHORT).show()
+            // Optionally preview thumbnails...
+        }
+    }
+
+    private fun areFieldsValid(): Boolean {
+        return binding.titleTxt.text.isNotBlank()
+                && binding.addText.text.isNotBlank()
+                && binding.bedTxt.text.isNotBlank()
+                && binding.bathTxt.text.isNotBlank()
+                && binding.sizeTxt.text.isNotBlank()
+                && binding.desctxt.text.isNotBlank()
+                && binding.priceeTxt.text.isNotBlank()
+    }
     private fun setarr() {
         val typeSpinner = findViewById<Spinner>(R.id.typeltxt)
 
@@ -98,48 +143,25 @@ class post_ad : AppCompatActivity() {
     }
 
 
-    private fun pickImage() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1001)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
-            imageUri = data?.data
-            imageUri?.let { addImagePreview(it) }
-            Toast.makeText(this, "Image selected", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun addImagePreview(uri: Uri) {
-        val imageView = ImageView(this)
-        imageView.setImageURI(uri)
-        val layoutParams = LinearLayout.LayoutParams(300, 300)
-        layoutParams.setMargins(16, 16, 16, 16)
-        imageView.layoutParams = layoutParams
-         //binding.previewImageView.removeAllViews() // Clear any previous previews
-         //binding.previewImageView.addView(imageView)
-    }
-
-    private fun uploadImageToImgBB() {
+    private fun uploadAllImagesToImgBB() {
+        imageUrls.clear()
         val apiKey = "c00ccfa768659c2bfe6b8d107f4dc5d3"
+        val client = OkHttpClient()
 
-        imageUri?.let { uri ->
+        // Upload each image in turn
+        selectedImageUris.forEachIndexed { index, uri ->
             val inputStream = contentResolver.openInputStream(uri)
-            val bytes = inputStream?.readBytes() ?: return
-            val base64Image = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP)
+            val bytes = inputStream?.readBytes() ?: return@forEachIndexed
+            val b64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP)
 
-            val client = OkHttpClient()
-            val requestBody = FormBody.Builder()
+            val body = FormBody.Builder()
                 .add("key", apiKey)
-                .add("image", base64Image)
+                .add("image", b64)
                 .build()
 
             val request = Request.Builder()
                 .url("https://api.imgbb.com/1/upload")
-                .post(requestBody)
+                .post(body)
                 .build()
 
             client.newCall(request).enqueue(object : Callback {
@@ -150,86 +172,73 @@ class post_ad : AppCompatActivity() {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val responseBody = response.body?.string() ?: ""
-                    Log.d("ImgBB", "Raw response: $responseBody")
-
-                    if (!response.isSuccessful) {
-                        runOnUiThread {
-                            Toast.makeText(this@post_ad, "ImgBB error: $responseBody", Toast.LENGTH_LONG).show()
+                    val resp = response.body?.string() ?: ""
+                    if (response.isSuccessful) {
+                        val link = JSONObject(resp)
+                            .getJSONObject("data")
+                            .getString("url")
+                        imageUrls.add(link)
+                        // If this was the last image, save the ad
+                        if (imageUrls.size == selectedImageUris.size) {
+                            runOnUiThread { saveAdToFirestore() }
                         }
-                        return
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(this@post_ad, "ImgBB error: $resp", Toast.LENGTH_LONG).show()
+                        }
                     }
-
-                    val json = JSONObject(responseBody)
-                    imageUrl = json.getJSONObject("data").getString("url")
-                    runOnUiThread { saveAdToFirestore() }
                 }
             })
         }
     }
 
-
-
     private fun saveAdToFirestore() {
-        val currentUser = firebaseAuth.currentUser
-        if (currentUser == null) {
+        val user = firebaseAuth.currentUser ?: run {
             Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
             return
         }
-
-        // 1) Grab a new DocumentReference – this reserves a unique ID
-        val adsCollection = firestore.collection("ads")
-        val newDocRef    = adsCollection.document()
-        val newAdId      = newDocRef.id
-
-        // 2) Build your AdModel with that ID
+        val newDoc = firestore.collection("ads").document()
         val ad = AdModel(
-            adid        = newAdId,
+            adid        = newDoc.id,
             title       = binding.titleTxt.text.toString(),
             address     = binding.addText.text.toString(),
             bed         = binding.bedTxt.text.toString(),
             bath        = binding.bathTxt.text.toString(),
-            size        = binding.sizeTxt.text.toString() + " " + binding.sizeTxt2.selectedItem.toString(),
+            size        = binding.sizeTxt.text.toString() + " " + binding.sizeTxt2.selectedItem,
             garage      = binding.gragetxt.selectedItem.toString(),
             type        = binding.typeltxt.selectedItem.toString(),
             description = binding.desctxt.text.toString(),
             price       = binding.priceeTxt.text.toString(),
-            imageUrls   = imageUrl ?: "",
-            userId      = currentUser.uid
+            imageUrls   = imageUrls,
+            userId      = user.uid
         )
-
-        // 3) Write the document at that reference
-        newDocRef.set(ad)
+        newDoc.set(ad)
             .addOnSuccessListener {
-                Toast.makeText(this, "Ad posted with ID $newAdId", Toast.LENGTH_SHORT).show()
-
-                val now = System.currentTimeMillis()
-                firestore.collection("users")
-                    .whereEqualTo("role", "admin")
-                    .get()
-                    .addOnSuccessListener { userSnaps ->
-                        for (userDoc in userSnaps.documents) {
-                            val notifRef = firestore.collection("notifications").document()
-                            val notif = NotificationModel(
-                                id = notifRef.id,
-                                userid = userDoc.id.toString(),
-                                message = "New ad posted By: ${ad.userId}\nTitle: ${ad.title}",
-                                timestamp = now
-                            )
-                            notifRef.set(notif)
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e("post_ad", "Failed to fetch admins: ${e.message}", e)
-                    }
-
+                sendAdminNotifications(ad)
+                Toast.makeText(this, "Ad posted!", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { e ->
-                Log.e("post_ad", "Firestore Failed: ${e.message}", e)
+                Log.e("post_ad", "Firestore error", e)
                 Toast.makeText(this, "Failed to post ad: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-
     }
 
+    private fun sendAdminNotifications(ad: AdModel) {
+        val now = System.currentTimeMillis()
+        firestore.collection("users")
+            .whereEqualTo("role", "admin")
+            .get()
+            .addOnSuccessListener { snaps ->
+                snaps.documents.forEach { userDoc ->
+                    val notif = NotificationModel(
+                        id        = firestore.collection("notifications").document().id,
+                        userid    = userDoc.id,
+                        message   = "New ad by ${ad.userId}: ${ad.title}",
+                        timestamp = now
+                    )
+                    firestore.collection("notifications").document(notif.id).set(notif)
+                }
+            }
+    }
 }

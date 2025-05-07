@@ -32,6 +32,28 @@
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <ImageView
+                    android:id="@+id/prev3"
+                    android:layout_width="69dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="16dp"
+                    android:padding="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/image1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/adv" />
+
+                <ImageView
+                    android:id="@+id/prev"
+                    android:layout_width="69dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="16dp"
+                    android:padding="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/back" />
+
+                <ImageView
                     android:id="@+id/backbtn"
                     android:layout_width="69dp"
                     android:layout_height="56dp"

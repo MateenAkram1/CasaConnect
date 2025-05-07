@@ -38,7 +38,7 @@ private fun initList() {
                     type = document.getString("type"),
                     title = document.getString("title"),
                     address = document.getString("address"),
-                    pickpath = document.getString("imageUrls"),
+                    pickpath = document.get("imageUrls") as List<String?>,
                     description = document.getString("description"),
                     price = document.get("price")?.toString()?.toIntOrNull() ?: 0,
                     bed = document.get("bed")?.toString()?.toIntOrNull() ?: 0,

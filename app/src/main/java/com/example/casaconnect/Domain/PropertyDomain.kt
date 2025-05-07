@@ -9,7 +9,7 @@ class PropertyDomain : Serializable {
     var type: String?
     var title: String?
     var address: String?
-    var pickpath: String?
+    var pickpath: List<String?>
     var description: String?
     var price: Int
     var bed: Int
@@ -24,7 +24,7 @@ class PropertyDomain : Serializable {
         type: String?,
         title: String?,
         address: String?,
-        pickpath: String?,
+        pickpath: List<String?>,
         description: String?,
         price: Int,
         bed: Int,
@@ -55,7 +55,7 @@ class PropertyDomain : Serializable {
         type: String?,
         title: String?,
         address: String?,
-        pickpath: String?,
+        pickpath: List<String?>,
         description: String?,
         price: Int,
         bed: Int,

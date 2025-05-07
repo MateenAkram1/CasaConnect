@@ -24,6 +24,7 @@ class DetailActivity : AppCompatActivity() {
     private var `object`: PropertyDomain? = null
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
+    private var index:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.enableEdgeToEdge()
@@ -32,6 +33,30 @@ class DetailActivity : AppCompatActivity() {
         this.bundles
         setVariable()
         binding!!.contacttxt2.visibility = View.INVISIBLE
+        binding!!.prev.setOnClickListener {
+            index--
+            if(index < 0 )
+                index = `object`!!.pickpath.size - 1
+            Glide.with(this@DetailActivity)
+                .load(`object`!!.pickpath[index])
+                .placeholder(android.R.color.darker_gray)
+                .error(android.R.drawable.stat_notify_error)
+                .into(binding!!.image1)
+
+        }
+
+        binding!!.prev3.setOnClickListener {
+            index++
+            if(index > `object`!!.pickpath.size - 1)
+                index = 0
+            Glide.with(this@DetailActivity)
+                .load(`object`!!.pickpath[index])
+                .placeholder(android.R.color.darker_gray)
+                .error(android.R.drawable.stat_notify_error)
+                .into(binding!!.image1)
+
+        }
+
         binding!!.analysisbtn.setOnClickListener {
             binding!!.contacttxt2.visibility = View.VISIBLE
             FirebaseFirestore.getInstance().collection("ads")
@@ -94,7 +119,7 @@ class DetailActivity : AppCompatActivity() {
         })
 
         Glide.with(this@DetailActivity)
-            .load(`object`!!.pickpath)
+            .load(`object`!!.pickpath[index])
             .placeholder(android.R.color.darker_gray)
             .error(android.R.drawable.stat_notify_error)
             .into(binding!!.image1)

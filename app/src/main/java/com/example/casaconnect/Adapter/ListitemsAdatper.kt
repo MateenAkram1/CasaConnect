@@ -37,7 +37,7 @@ class ListitemsAdatper(private val items: ArrayList<PropertyDomain?>) :
         holder.binding.bedtxt.text = "${item!!.bed} Bed"
 
         Glide.with(context)
-            .load(item.pickpath)
+            .load(item.pickpath[0])
             .placeholder(android.R.color.darker_gray)
             .error(android.R.drawable.stat_notify_error)
             .into(holder.binding.pic)
@@ -52,7 +52,7 @@ class ListitemsAdatper(private val items: ArrayList<PropertyDomain?>) :
             val db = FirebaseFirestore.getInstance()
 
             db.collection("ads")
-                .whereEqualTo("adid", item!!.adid)    // 🔥 match a field, not document ID
+                .whereEqualTo("adid", item!!.adid)
                 .get()
                 .addOnSuccessListener { snapshot ->
                     for (doc in snapshot.documents) {
