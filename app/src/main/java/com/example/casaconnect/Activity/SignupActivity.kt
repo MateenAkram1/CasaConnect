@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.casaconnect.databinding.ActivitySignupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 
 data class UserModel(
     val userId: String = "",
@@ -46,7 +47,11 @@ class SignupActivity : AppCompatActivity() {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val userId = firebaseAuth.currentUser?.uid ?: return@addOnCompleteListener
-                                val user = UserModel(userId, name, email,c_n,"user")
+                                lateinit var user: UserModel
+                                if(binding.checkBox.isChecked)
+                                    user = UserModel(userId, name, email,c_n,"agent")
+                                else
+                                    user = UserModel(userId, name, email,c_n,"user")
 
                                 firestore.collection("users").document(userId).set(user)
                                     .addOnSuccessListener {

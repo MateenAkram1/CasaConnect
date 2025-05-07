@@ -5,13 +5,19 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.casaconnect.Domain.NotificationModel
 import com.example.casaconnect.Model.AdModel
+import com.example.casaconnect.R
 import com.example.casaconnect.databinding.ActivityPostAdBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,7 +38,9 @@ class post_ad : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityPostAdBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setarr()
+        setarr1()
+        setarr2()
         binding.imgButton.setOnClickListener {
             pickImage()
         }
@@ -45,6 +53,46 @@ class post_ad : AppCompatActivity() {
             }
         }
     }
+
+    private fun setarr() {
+        val typeSpinner = findViewById<Spinner>(R.id.typeltxt)
+
+        val types = resources.getStringArray(R.array.property_types)
+        val spinnerAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            types
+        )
+        typeSpinner.adapter = spinnerAdapter
+
+    }
+
+    private fun setarr1() {
+        val typeSpinner = findViewById<Spinner>(R.id.gragetxt)
+
+        val types = resources.getStringArray(R.array.garageYN)
+        val spinnerAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            types
+        )
+        typeSpinner.adapter = spinnerAdapter
+
+    }
+
+    private fun setarr2() {
+        val typeSpinner = findViewById<Spinner>(R.id.size_txt2)
+
+        val types = resources.getStringArray(R.array.size_types)
+        val spinnerAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            types
+        )
+        typeSpinner.adapter = spinnerAdapter
+
+    }
+
 
     private fun pickImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -137,9 +185,9 @@ class post_ad : AppCompatActivity() {
             address     = binding.addText.text.toString(),
             bed         = binding.bedTxt.text.toString(),
             bath        = binding.bathTxt.text.toString(),
-            size        = binding.sizeTxt.text.toString(),
-            garage      = binding.gragetxt.text.toString(),
-            type        = binding.typeltxt.text.toString(),
+            size        = binding.sizeTxt.text.toString() + " " + binding.sizeTxt2.selectedItem.toString(),
+            garage      = binding.gragetxt.selectedItem.toString(),
+            type        = binding.typeltxt.selectedItem.toString(),
             description = binding.desctxt.text.toString(),
             price       = binding.priceeTxt.text.toString(),
             imageUrls   = imageUrl ?: "",
@@ -151,7 +199,6 @@ class post_ad : AppCompatActivity() {
             .addOnSuccessListener {
                 Toast.makeText(this, "Ad posted with ID $newAdId", Toast.LENGTH_SHORT).show()
 
-                // Fetch all admins and send notifications
                 val now = System.currentTimeMillis()
                 firestore.collection("users")
                     .whereEqualTo("role", "admin")
