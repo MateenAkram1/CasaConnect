@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class log_signActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLogSignBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+    private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,8 +19,6 @@ class log_signActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityLogSignBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        firebaseAuth = FirebaseAuth.getInstance()
 
         binding.signinButton.setOnClickListener {
             val email = binding.Emailtxt.text.toString()

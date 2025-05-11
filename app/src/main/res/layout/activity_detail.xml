@@ -243,6 +243,18 @@
                 android:layout_marginTop="16dp"/>
 
             <TextView
+                android:id="@+id/agenttxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This ad is posted by Agent"
+                android:textStyle="italic"
+                android:textSize="18dp"
+                android:textColor="@color/black"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
                 android:id="@+id/textView25"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

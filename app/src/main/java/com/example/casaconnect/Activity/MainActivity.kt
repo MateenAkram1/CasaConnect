@@ -88,6 +88,9 @@ class MainActivity : AppCompatActivity() {
                 if (i == R.id.wishlist) {
                     startActivity(Intent(this@MainActivity, wishlist_activity::class.java))
                 }
+                if (i == R.id.explorer) {
+                    startActivity(Intent(this@MainActivity, Calculator::class.java))
+                }
             }
         })
     }

@@ -10,6 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="always"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,12 +57,13 @@
                     android:id="@+id/login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_weight="1"
                     android:background="@drawable/orange_bg"
                     android:text="Login"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
+
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

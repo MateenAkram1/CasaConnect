@@ -32,6 +32,21 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding!!.getRoot())
         this.bundles
         setVariable()
+
+        firestore.collection("users").document(`object`!!.owndby.toString()).get()
+            .addOnSuccessListener { doc ->
+                val role = doc.getString("role") ?: "user"
+
+                if (role == "agent") {
+                    binding!!.agenttxt.text = "Ad poster is a CasaConnect Property Agent"
+                } else {
+                    binding!!.agenttxt.text = "Ad poster is a CasaConnect User"
+                }
+
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to fetch role: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         binding!!.contacttxt2.visibility = View.INVISIBLE
         binding!!.prev.setOnClickListener {
             index--

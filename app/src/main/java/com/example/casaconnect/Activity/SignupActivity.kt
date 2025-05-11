@@ -15,7 +15,7 @@ data class UserModel(
     val name: String = "",
     val email: String = "",
     val c_n: String,
-    val string: String
+    val role: String
 )
 
 class SignupActivity : AppCompatActivity() {
