@@ -58,7 +58,6 @@ class NotificationsActivity : AppCompatActivity() {
                    }
                 }
 
-                // 4) bind to RecyclerView
                 binding.rvNotifications.layoutManager = LinearLayoutManager(this)
                 binding.rvNotifications.adapter       = NotificationAdapter(list)
             }
