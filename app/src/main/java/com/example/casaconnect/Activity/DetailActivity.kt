@@ -140,6 +140,19 @@ class DetailActivity : AppCompatActivity() {
             .error(android.R.drawable.stat_notify_error)
             .into(binding!!.image1)
 
+        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+        db.collection("users")
+            .get()
+            .addOnSuccessListener{ snaps->
+                for(u in snaps){
+                    if(`object`!!.owndby.toString() == u.getString("userId")) {
+                        binding!!.contacttxt.text = u.getString("email")+"\n\n"+u.getString("c_n")
+
+                    }
+                }
+
+            }
+
         binding!!.titletxt.setText(`object`!!.type + " " + `object`!!.title)
         binding!!.typetxt.setText(`object`!!.type)
         binding!!.addresstxt.setText(`object`!!.address)

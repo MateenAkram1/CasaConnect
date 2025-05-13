@@ -24,7 +24,7 @@ class Calculator : AppCompatActivity() {
         val types = resources.getStringArray(R.array.Options)
         val spinnerAdapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_item,
             types
         )
         typeSpinner.adapter = spinnerAdapter

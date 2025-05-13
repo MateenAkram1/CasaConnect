@@ -49,17 +49,22 @@ class post_ad : AppCompatActivity() {
             pickImages()
         }
 
+        binding.doneButton.visibility = View.VISIBLE
         binding.doneButton.setOnClickListener {
+            binding.doneButton.visibility = View.INVISIBLE
             if (selectedImageUris.isEmpty()) {
+                binding.doneButton.visibility = View.VISIBLE
                 Toast.makeText(this, "Please select at least one image", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (areFieldsValid()) {
                 uploadAllImagesToImgBB()
             } else {
+                binding.doneButton.visibility = View.VISIBLE
                 Toast.makeText(this, "Please enter all details", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private fun pickImages() {
