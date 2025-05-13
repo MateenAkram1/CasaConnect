@@ -124,7 +124,9 @@ class DetailActivity : AppCompatActivity() {
         binding!!.calcBtn.setOnClickListener  {
             startActivity(Intent(this, Calculator::class.java))
         }
-
+        binding!!.backbtn.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setVariable() {

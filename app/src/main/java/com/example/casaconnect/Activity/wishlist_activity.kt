@@ -24,7 +24,9 @@ class wishlist_activity : AppCompatActivity() {
         binding = ActivityWishlistBinding.inflate(getLayoutInflater())
         setContentView(binding!!.root)
         initList()
-
+        binding!!.backbtn.setOnClickListener {
+            finish()
+        }
     }
     private fun initList() {
         val items1 = ArrayList<PropertyDomain?>()

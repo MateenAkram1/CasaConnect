@@ -19,6 +19,9 @@ class own_Ad_list : AppCompatActivity() {
         binding = ActivityOwnAdListBinding.inflate(getLayoutInflater())
         setContentView(binding!!.root)
         initList()
+        binding!!.backbtn.setOnClickListener {
+            finish()
+        }
     }
 
 private fun initList() {

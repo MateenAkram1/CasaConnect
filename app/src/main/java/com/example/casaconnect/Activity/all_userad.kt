@@ -25,6 +25,9 @@ class all_userad : AppCompatActivity() {
         binding = ActivityAllUseradBinding.inflate(getLayoutInflater())
         setContentView(binding!!.getRoot())
         initList()
+        binding!!.backbtn.setOnClickListener {
+            finish()
+        }
     }
     private fun initList() {
         val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()

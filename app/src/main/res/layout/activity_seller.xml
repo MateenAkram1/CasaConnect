@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginBottom="2dp"
-                android:text="Post an Add"
+                android:text="Post an Ad"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
