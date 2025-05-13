@@ -28,7 +28,7 @@ class ListitemsAdatper(private val items: ArrayList<PropertyDomain?>) :
         val item = items[position]
         val context = holder.itemView.context
 
-        holder.binding.titletxt.text = item?.title
+        holder.binding.titletxt.text = item?.type +" " + item?.title
         holder.binding.pricetxt.text = "$${item!!.price}"
         holder.binding.sizetxt.text = item?.size ?: "N/A"
         holder.binding.garagetxt.text = if (item?.garage == true) "Car Garage" else "No Garage"

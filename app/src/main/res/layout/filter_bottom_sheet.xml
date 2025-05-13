@@ -74,20 +74,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Location"
-            android:inputType="number" />
+            android:inputType="text" />
 
         <!-- Apply -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/applyFilterBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:background="@drawable/orange_bg"
+            android:textColor="@color/white"
             android:text="Apply Filter" />
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/removeFilterBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="RemoveFilter" />
+            android:background="@drawable/orange_bg"
+            android:textColor="@color/white"
+            android:text="Remove Filter" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

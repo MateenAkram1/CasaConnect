@@ -24,4 +24,8 @@
         <item>Cost</item>
         <item>Percent</item>
     </string-array>
+    <string-array name="titles">
+    <item>For Sale</item>
+    <item>For Rent</item>
+    </string-array>
 </resources>

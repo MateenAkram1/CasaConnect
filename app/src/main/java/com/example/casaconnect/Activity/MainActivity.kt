@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Unable to open filters", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     override fun onDestroy() {
@@ -176,6 +177,13 @@ class MainActivity : AppCompatActivity() {
         val v = layoutInflater.inflate(R.layout.filter_bottom_sheet, null)
         dialog.setContentView(v)
 
+        val rem  = v.findViewById<Button>(R.id.removeFilterBtn)
+        rem.setOnClickListener {
+            dialog.dismiss()
+            loadAds()
+            return@setOnClickListener
+        }
+
         val minEt  = v.findViewById<EditText>(R.id.minPriceEt)
         val maxEt  = v.findViewById<EditText>(R.id.maxPriceEt)
         val bedEt  = v.findViewById<EditText>(R.id.bedEt)
@@ -194,7 +202,6 @@ class MainActivity : AppCompatActivity() {
             val currentSearch = binding.searchbar.text.toString().trim().takeIf { it.isNotBlank() }
             loadAds(minPrice, maxPrice, minBeds, minBaths, location, currentSearch)
         }
-
         dialog.show()
     }
 }

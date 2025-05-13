@@ -43,6 +43,7 @@ class post_ad : AppCompatActivity() {
         setarr()
         setarr1()
         setarr2()
+        setarr3()
 
         binding.imgButton.setOnClickListener {
             pickImages()
@@ -88,8 +89,7 @@ class post_ad : AppCompatActivity() {
     }
 
     private fun areFieldsValid(): Boolean {
-        return binding.titleTxt.text.isNotBlank()
-                && binding.addText.text.isNotBlank()
+        return  binding.addText.text.isNotBlank()
                 && binding.bedTxt.text.isNotBlank()
                 && binding.bathTxt.text.isNotBlank()
                 && binding.sizeTxt.text.isNotBlank()
@@ -102,7 +102,7 @@ class post_ad : AppCompatActivity() {
         val types = resources.getStringArray(R.array.property_types)
         val spinnerAdapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_item,
             types
         )
         typeSpinner.adapter = spinnerAdapter
@@ -115,7 +115,7 @@ class post_ad : AppCompatActivity() {
         val types = resources.getStringArray(R.array.garageYN)
         val spinnerAdapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_item,
             types
         )
         typeSpinner.adapter = spinnerAdapter
@@ -128,13 +128,25 @@ class post_ad : AppCompatActivity() {
         val types = resources.getStringArray(R.array.size_types)
         val spinnerAdapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_item,
             types
         )
         typeSpinner.adapter = spinnerAdapter
 
     }
 
+    private fun setarr3() {
+        val typeSpinner = findViewById<Spinner>(R.id.title_txt)
+
+        val types = resources.getStringArray(R.array.titles)
+        val spinnerAdapter = ArrayAdapter(
+            this,
+            R.layout.spinner_item,
+            types
+        )
+        typeSpinner.adapter = spinnerAdapter
+
+    }
 
     private fun uploadAllImagesToImgBB() {
         imageUrls.clear()
@@ -190,7 +202,7 @@ class post_ad : AppCompatActivity() {
         val newDoc = firestore.collection("ads").document()
         val ad = AdModel(
             adid        = newDoc.id,
-            title       = binding.titleTxt.text.toString(),
+            title       = binding.titleTxt.selectedItem.toString(),
             address     = binding.addText.text.toString(),
             bed         = binding.bedTxt.text.toString(),
             bath        = binding.bathTxt.text.toString(),

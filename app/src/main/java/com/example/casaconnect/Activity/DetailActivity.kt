@@ -77,6 +77,7 @@ class DetailActivity : AppCompatActivity() {
             FirebaseFirestore.getInstance().collection("ads")
                 .whereEqualTo("type", `object`!!.type)
                 .whereEqualTo("size", `object`!!.size)
+                .whereEqualTo("title", `object`!!.title)
                 .get()
                 .addOnSuccessListener { documents ->
                     var ad: Int = 0
@@ -139,7 +140,7 @@ class DetailActivity : AppCompatActivity() {
             .error(android.R.drawable.stat_notify_error)
             .into(binding!!.image1)
 
-        binding!!.titletxt.setText(`object`!!.title)
+        binding!!.titletxt.setText(`object`!!.type + " " + `object`!!.title)
         binding!!.typetxt.setText(`object`!!.type)
         binding!!.addresstxt.setText(`object`!!.address)
         binding!!.descriptiontxt.setText(`object`!!.description)

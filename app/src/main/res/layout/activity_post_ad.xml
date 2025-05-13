@@ -44,7 +44,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <!-- Title -->
-                <EditText
+                <Spinner
                     android:id="@+id/title_txt"
                     android:layout_width="0dp"
                     android:layout_height="45dp"
@@ -52,12 +52,10 @@
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="64dp"
                     android:background="@drawable/bg_edit_text"
-                    android:hint="Title"
-                    android:inputType="text"
+                    android:prompt="@string/Garage"
+                    android:spinnerMode="dropdown"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView19" />
