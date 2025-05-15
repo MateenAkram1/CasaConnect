@@ -69,21 +69,20 @@ class NotificationsActivity : AppCompatActivity() {
 
     private fun clearAllNotifications() {
         val uid = auth.currentUser?.uid ?: return
-        db.collection("users")
-            .document(uid)
-            .collection("notifications")
+        db.collection("notifications")
+            .whereEqualTo("userid", uid.toString())
             .get()
-            .addOnSuccessListener { snaps ->
-                val batch = db.batch()
-                snaps.documents.forEach { batch.delete(it.reference) }
-                batch.commit()
-                    .addOnSuccessListener {
-                        binding.rvNotifications.adapter = NotificationAdapter(emptyList())
-                        Toast.makeText(this, "Cleared all", Toast.LENGTH_SHORT).show()
-                    }
+            .addOnSuccessListener { snapshot ->
+                for (doc in snapshot.documents) {
+                    doc.reference.delete()
+                        .addOnSuccessListener {
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                        }
+                }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Error clearing: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 }

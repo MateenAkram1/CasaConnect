@@ -80,6 +80,7 @@ class wishlist_activity : AppCompatActivity() {
                         score = document.get("rating")?.toString()?.toDoubleOrNull() ?: 0.0,
                         adid = document.getString("adid").toString()
                     )
+
                     if (property.adid in adss) {
                         items1.add(property)
                     }

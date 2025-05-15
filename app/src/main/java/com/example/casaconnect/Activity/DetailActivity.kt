@@ -105,12 +105,14 @@ class DetailActivity : AppCompatActivity() {
                     Log.e("Analysis", "Query failed: ${e.message}", e)
                 }
         }
+        val currentUser = firebaseAuth.currentUser ?: run {
+            Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
+            return
+        }
         binding!!.wishlistBtn.setOnClickListener{
-            val currentUser = firebaseAuth.currentUser ?: run {
-                Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
 
-            }
-            val obj = wish(`object`!!.owndby.toString(),`object`!!.adid.toString())
+
+            val obj = wish(userid = currentUser.uid.toString(),adid = `object`!!.adid.toString())
             firestore.collection("wishlist").add(obj)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Added to wishlist", Toast.LENGTH_SHORT).show()
